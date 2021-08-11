@@ -35,7 +35,7 @@ class ReviewRepositoryTest extends KernelTestCase
     public function testCountRecord()
     {
         $repository = self::$entityManager->getRepository(Review::class);
-        $count = $repository->getCountRecords();
+        $count = $repository->count([]);
 
         $this->assertEquals(ReviewFixture::REVIEW_COUNT + ReviewFixture::REVIEW_STATIC_COUNT, $count);
     }

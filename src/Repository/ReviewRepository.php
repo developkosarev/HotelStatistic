@@ -5,8 +5,6 @@ namespace App\Repository;
 use App\Entity\Hotel;
 use App\Entity\Review;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ReviewRepository extends ServiceEntityRepository
@@ -14,19 +12,6 @@ class ReviewRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Review::class);
-    }
-
-    public function getCountRecords(): int
-    {
-        $query = $this->createQueryBuilder('r')
-            ->select('COUNT(r.id)')
-            ->getQuery();
-
-        try {
-            return $query->getSingleScalarResult();
-        } catch (NoResultException | NonUniqueResultException $e) {
-            return 0;
-        }
     }
 
     public function getHotelStatistic(Hotel $hotel, \DateTime $beginDate, \DateTime $endDate, string $groupBy = Review::MONTHLY)
