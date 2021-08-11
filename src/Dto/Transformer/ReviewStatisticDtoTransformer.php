@@ -7,19 +7,19 @@ use App\Dto\ReviewStatisticDto;
 class ReviewStatisticDtoTransformer extends AbstractDtoTransformer
 {
     /**
-     * @param $statistic
+     * @param $object
      *
      * @return ReviewStatisticDto
      */
-    public function transformFromObject($statistic): ReviewStatisticDto
+    public function transformFromObject($object): ReviewStatisticDto
     {
-        if (!is_array($statistic)) {
-            throw new UnexpectedTypeException('Expected type of Array but got ' . \get_class($statistic));
+        if (!is_array($object)) {
+            throw new UnexpectedTypeException('Expected type of Array but got ' . \get_class($object));
         }
 
-        $dateGroup = $this->getDateGroup($statistic);
+        $dateGroup = $this->getDateGroup($object);
 
-        return new ReviewStatisticDto($statistic['reviewCount'], $statistic['averageScore'], $dateGroup);
+        return new ReviewStatisticDto($object['reviewCount'], $object['averageScore'], $dateGroup);
     }
 
     private function getDateGroup(array $statistic): string

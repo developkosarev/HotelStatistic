@@ -14,7 +14,7 @@ class ReviewRepositoryTest extends KernelTestCase
     /**
      * @var EntityManager
      */
-    protected static $entityManager;
+    private static $entityManager;
 
     /**
      * @var Hotel

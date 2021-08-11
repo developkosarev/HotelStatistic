@@ -2,9 +2,9 @@
 
 namespace App\Controller\Api;
 
-use App\Dto\Transformer\ReviewStatisticDtoTransformer;
+use App\Dto\Transformer\DtoTransformerInterface;
 use App\Entity\Hotel;
-use App\Services\ReviewService;
+use App\Services\ReviewServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,17 +17,17 @@ class ReviewController
 {
     private $reviewService;
 
-    private $transformer;
+    private $reviewStatisticDtoTransformer;
 
     private $serializer;
 
     public function __construct(
-        ReviewService $reviewService,
-        ReviewStatisticDtoTransformer $transformer,
+        ReviewServiceInterface $reviewService,
+        DtoTransformerInterface $reviewStatisticDtoTransformer,
         SerializerInterface $serializer
     ) {
         $this->reviewService = $reviewService;
-        $this->transformer = $transformer;
+        $this->reviewStatisticDtoTransformer = $reviewStatisticDtoTransformer;
         $this->serializer = $serializer;
     }
 
@@ -46,7 +46,7 @@ class ReviewController
         $statistics = $this->reviewService
             ->getHotelStatistic($hotel, $beginDate, $endDate);
 
-        $reviewStatistics = $this->transformer
+        $reviewStatistics = $this->reviewStatisticDtoTransformer
             ->transformFromObjects($statistics);
 
         $data = $this->serializer
