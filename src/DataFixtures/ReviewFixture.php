@@ -4,13 +4,14 @@ namespace App\DataFixtures;
 
 use App\Entity\Review;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class ReviewFixture extends Fixture
+class ReviewFixture extends Fixture implements FixtureGroupInterface
 {
-    public const REVIEW_COUNT = 100000;
+    public const REVIEW_COUNT = 1000000;
     public const REVIEW_STATIC_COUNT = 8;
 
     public function load(ObjectManager $manager)
@@ -21,7 +22,11 @@ class ReviewFixture extends Fixture
         $progressBar = new ProgressBar($output, self::REVIEW_COUNT);
 
         $batchSize = 1000;
+        $permittedChar = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+        //echo round(memory_get_usage() / 1024 / 1024, 2) . ' MB' . PHP_EOL;
+
+        $comment = substr(md5(rand()), 0, 100);
         for ($i = 1; $i <= self::REVIEW_COUNT; $i++) {
             if (($i % $batchSize) === 0) {
                 $manager->flush();
@@ -32,7 +37,43 @@ class ReviewFixture extends Fixture
 
             $hotel = rand(1, 10);
             $score = rand(1, 5);
-            $comment = substr(md5(rand()), 0, 100);
+            //$comment = substr(md5(rand()), 0, 100);
+            $comment = str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+                str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .
+				str_shuffle($permittedChar) .				
+                str_shuffle($permittedChar);
 
             $review = new Review();
             $review->setHotel($this->getReference(HotelFixture::FIXTURE_HOTEL_REFERENCE . $hotel))
@@ -45,6 +86,8 @@ class ReviewFixture extends Fixture
         $manager->flush();
 
         $progressBar->finish();
+
+        echo PHP_EOL;
     }
 
     private function loadStatic(ObjectManager $manager)
@@ -106,5 +149,10 @@ class ReviewFixture extends Fixture
         }
 
         return strtotime(empty($max) ? 'now' : $max);
+    }
+
+    public static function getGroups(): array
+    {
+        return ['group1'];
     }
 }

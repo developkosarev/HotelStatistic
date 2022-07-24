@@ -18,10 +18,10 @@ Database setup
 ```bash
 $ php bin/console doctrine:database:create --env=dev
 $ php bin/console doctrine:schema:update --force --env=dev
-$ php bin/console doctrine:fixtures:load --env=dev
+$ php bin/console doctrine:fixtures:load --env=dev --no-debug
 $ php bin/console doctrine:database:create --env=test
 $ php bin/console doctrine:schema:update --force --env=test
-$ php bin/console doctrine:fixtures:load --env=test
+$ php bin/console doctrine:fixtures:load --env=test --no-debug
 ```
 
 ## Usage
@@ -31,3 +31,30 @@ browser at the given URL (<https://localhost:8000> by default):
 
 ## Unit Tests: 
 ./vendor/bin/phpunit --colors --verbose --testdox
+
+# Docker
+
+then prepare docker environment:
+```
+docker-compose build
+docker-compose up -d
+docker-compose run php bash
+```
+
+final project steps inside of docker container:
+```
+composer install
+bin/console doctrine:database:create --env=dev
+bin/console doctrine:schema:create --env=dev
+bin/console doctrine:fixtures:load --env=dev --no-debug
+```
+
+then go to `http://localhost`
+
+```
+docker exec -it hotels_statistic_php bash
+./vendor/bin/phpunit --colors --verbose --testdox
+```
+
+
+https://programmierfrage.com/items/how-to-install-php-amqplib-in-alpine-image
